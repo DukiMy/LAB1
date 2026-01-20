@@ -7,100 +7,59 @@ package lab1;
 import java.awt.Color;
 import static java.lang.Math.sin;
 import static java.lang.Math.cos;
+import java.awt.geom.Point2D;
 
-/**
- * Definierar bilar i högsta abstraktionnivå.
- * Enkapsulerar samtliga variabler.
- * Åtkomstmetoder som exponeras globalt påkallas inte av den interna klasshierarkin.
- * Variabler som behövs inom klasshierarkin sätts med åtkomstmodifieraren protected.
- */
 abstract class Vehicle implements Movable {
 
+  private final Point2D pos = new Point2D.Double(0.0, 0.0);
+  private double direction;
 	private int nrDoors;
 	private double enginePower;
 	private double currentSpeed;
 	private Color color;
 	private String modelName;
-  private double xPos;
-  private double yPos;
-  private double direction;
 
 	protected Vehicle(int nrDoors, double enginePower, Color color, String modelName) {
+    this.direction = 0.0;
 		this.nrDoors = nrDoors;
 		this.enginePower = enginePower;
 		this.color = color;
 		this.modelName = modelName;
-    this.xPos = this.yPos = 0.0;
-    this.direction = 0.0;
 	  stopEngine();
   }
 
-	public int getNrDoors() {
-		return nrDoors;
-	}
+  public double getX() { return pos.getX(); }
 
-	public double getEnginePower() {
-		return enginePower;
-	}
+  public double getY() { return pos.getY(); }
 
-	public double getCurrentSpeed() {
-		return currentSpeed;
-	}
+	public int getNrDoors() { return nrDoors; }
 
-	public Color getColor() {
-		return color;
-	}
+	public double getEnginePower() { return enginePower; }
 
-  public String getModelName() {
-    return modelName;
-  }
+	public double getCurrentSpeed() { return currentSpeed;}
 
-  public double getXPos() {
-    return xPos;
-  }
+	public Color getColor() { return color; }
 
-  public double getYPos() {
-    return yPos;
-  }
+  public String getModelName() { return modelName; }
 
-	public void setColor(Color color) {
-		this.color = color;
-	}
+	public void setColor(Color c) { color = c; }
 
-  protected void setCurrentSpeed(double currentSpeed) {
-    this.currentSpeed = currentSpeed;
-  }
+  protected void setCurrentSpeed(double s) { currentSpeed = s; }
 
-  public void setXPos(double xPos) {
-    this.xPos = xPos;
-  }
-
-  public void setYPos(double yPos) {
-    this.yPos = yPos;
-  }
-
-	public void startEngine() {
-    final double creepSpeed = 0.1;
-    setCurrentSpeed(creepSpeed);
-	}
+	public void startEngine() { setCurrentSpeed(0.1); }
 
   public void move() {
-    xPos += cos(direction) * currentSpeed;
-    yPos += sin(direction) * currentSpeed;
+    pos.setLocation(
+      pos.getX() + cos(direction) * getCurrentSpeed(),
+      pos.getY() + sin(direction) * getCurrentSpeed()
+    );
   }
 
-  public void turnLeft() {
-    direction += 0.2;
-  }
+  public void turnLeft() { direction += 0.1; }
 
-  public void turnRight() {
-    direction -= 0.2;
-  }
+  public void turnRight() { direction -= 0.1; }
 
-	public void stopEngine() {
-    final double noSpeed = 0.0;
-    setCurrentSpeed(noSpeed);
-	}
+	public void stopEngine() { setCurrentSpeed(0.0); }
 
 	protected abstract double speedFactor();
 
