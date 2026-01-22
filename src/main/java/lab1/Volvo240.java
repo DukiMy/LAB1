@@ -22,6 +22,6 @@ public final class Volvo240 extends Vehicle {
 
 	@Override
 	protected void decrementSpeed(double amount) {
-    setCurrentSpeed(Math.max(getCurrentSpeed() - speedFactor() * amount, 0));
+    setCurrentSpeed(getCurrentSpeed() - speedFactor() * amount);
 	}
 }

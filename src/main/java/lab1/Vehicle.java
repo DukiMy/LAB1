@@ -41,7 +41,7 @@ abstract class Vehicle implements Movable {
   /**
    * currentSpeed ligger alltid mellan [0, enginePower]
    */
-	public double getCurrentSpeed() { 
+	public double getCurrentSpeed() {
     currentSpeed = (currentSpeed < 0) ? 0 : currentSpeed;
     currentSpeed = (currentSpeed > enginePower) ? enginePower : currentSpeed;
 
@@ -77,7 +77,7 @@ abstract class Vehicle implements Movable {
 
 	protected abstract void decrementSpeed(double amount);
 
-  
+
 
   /**
    * Parametervärden håller sig inom intervallet [0, 1]
@@ -85,51 +85,43 @@ abstract class Vehicle implements Movable {
    */
 	public void gas(double amount) {
     // intervall [0, 1]
-    try {
-      if (amount < 0 ^ amount > 1) {
-        throw new IllegalArgumentException(
-          "Parameter 'amount' was out of range: " 
-        );
-      }
+    if (amount < 0 ^ amount > 1) {
+      throw new IllegalArgumentException(
+        "Parameter 'amount' är utanför intervallet [0 ... 1]: "
+      );
+    }
 
-      double speedBefore = currentSpeed;
-      incrementSpeed(amount);
-      double speedAfter = currentSpeed; 
-  
-    } catch (IllegalArgumentException iae) {
-      iae.toString();
-      iae.printStackTrace();
-      System.exit(1);
+    double speedBefore = currentSpeed;
+    incrementSpeed(amount);
+    double speedAfter = currentSpeed;
+
+    if (speedAfter <= speedBefore) {
+      throw new IllegalStateException(
+        "'incrementSpeed' ökade inte farten."
+      );
     }
-    catch (Exception e) {
-      e.toString();
-      e.printStackTrace();
-      System.exit(1);
-    }
-    
-    try () {
-      
-    } catch (Exception e) {
-      // TODO: handle exception
-    }
-    // Om bil bromsar när man gasar -> sätt oförändrat värde.
-    currentSpeed = (speedBefore > speedAfter) ? speedBefore : speedAfter; 
 	}
 
   /**
    * Parametervärden håller sig inom intervallet [0, 1]
-   * Farten kan inte sänkas
+   * Farten kan inte sänkas.
    */
 	public void brake(double amount) {
     // intervall [0, 1]
-    amount = (amount < 0) ? 0 : amount;
-    amount = (amount > 1) ? 1 : amount;
+    if (amount < 0 || amount > 1) {
+      throw new IllegalArgumentException(
+        "Parameter 'amount' är utanför intervallet [0 ... 1]: "
+      );
+    }
 
     double speedBefore = currentSpeed;
     decrementSpeed(amount);
-    double speedAfter = currentSpeed; 
+    double speedAfter = currentSpeed;
 
-    // Om bil gasar när man bromsar -> nödstopp.
-    currentSpeed = (speedBefore < speedAfter) ? 0 : speedAfter;
+    if (speedAfter >= speedBefore) {
+      throw new IllegalStateException(
+        "'decrementSpeed' sänkte inte farten."
+      );
+    }
 	}
 }

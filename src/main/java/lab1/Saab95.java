@@ -6,9 +6,8 @@ public final class Saab95 extends Vehicle implements TurboCharged {
 	private boolean turboOn;
 
 	public Saab95() {
-		turboOn = false;
-
 		super(/* Number of doors */ 2, /* Engine power */ 125, /* Car color */ red, /* Car model */ "Saab95");
+		turboOn = false;
 	}
 
 	public void setTurboOn() {
