@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Vehicle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab1</a> &gt; <a href="index.source.html" class="el_package">lab1</a> &gt; <span class="el_source">Vehicle.java</span></div><h1>Vehicle.java</h1><pre class="source lang-java linenums">/**
+ *  Utfärdat av Durim Miziraj
+ *  Kontakt: gusmizdu@student.gu.se
+ */
+
+package lab1;
+import java.awt.Color;
+import static java.lang.Math.sin;
+import static java.lang.Math.cos;
+import java.awt.geom.Point2D;
+
+abstract class Vehicle implements Movable {
+
+<span class="fc" id="L14">  private final Point2D pos = new Point2D.Double(0.0, 0.0);</span>
+  private double direction;
+	private int nrDoors;
+	private double enginePower;
+	private double currentSpeed;
+	private Color color;
+	private String modelName;
+
+<span class="fc" id="L22">	protected Vehicle(int nrDoors, double enginePower, Color color, String modelName) {</span>
+<span class="fc" id="L23">    this.direction = 0.0;</span>
+<span class="fc" id="L24">		this.nrDoors = nrDoors;</span>
+<span class="fc" id="L25">		this.enginePower = enginePower;</span>
+<span class="fc" id="L26">		this.color = color;</span>
+<span class="fc" id="L27">		this.modelName = modelName;</span>
+<span class="fc" id="L28">	  stopEngine();</span>
+<span class="fc" id="L29">  }</span>
+
+<span class="fc" id="L31">  public double getX()            { return pos.getX(); }</span>
+
+<span class="fc" id="L33">  public double getY()            { return pos.getY(); }</span>
+
+<span class="fc" id="L35">  public double getDirection()    { return direction; }</span>
+
+<span class="nc" id="L37">	public int    getNrDoors()      { return nrDoors; }</span>
+
+<span class="fc" id="L39">	public double getEnginePower()  { return enginePower; }</span>
+
+<span class="fc" id="L41">	public double getCurrentSpeed() { return currentSpeed; }</span>
+
+<span class="nc" id="L43">	public Color  getColor()        { return color; }</span>
+
+<span class="fc" id="L45">  public String getModelName()    { return modelName; }</span>
+
+<span class="nc" id="L47">  protected void setColor(Color c) { color = c; }</span>
+
+  protected void setCurrentSpeed(double s) {
+<span class="pc bpc" id="L50" title="1 of 4 branches missed.">    if (s == currentSpeed &amp;&amp; s != 0.0) {</span>
+<span class="nc" id="L51">      throw new IllegalStateException(</span>
+        &quot;'setCurrentSpeed' ändrade inte farten.&quot;
+      );
+    }
+
+<span class="fc" id="L56">    currentSpeed = s;</span>
+<span class="fc" id="L57">  }</span>
+
+<span class="fc" id="L59">	public void startEngine() { setCurrentSpeed(0.1); }</span>
+
+  public void move() {
+<span class="fc" id="L62">    pos.setLocation(</span>
+<span class="fc" id="L63">      pos.getX() + cos(direction) * getCurrentSpeed(),</span>
+<span class="fc" id="L64">      pos.getY() + sin(direction) * getCurrentSpeed()</span>
+    );
+<span class="fc" id="L66">  }</span>
+
+<span class="fc" id="L68">  public void turnLeft() { direction += 0.1; }</span>
+
+<span class="fc" id="L70">  public void turnRight() { direction -= 0.1; }</span>
+
+<span class="fc" id="L72">	public void stopEngine() { setCurrentSpeed(0.0); }</span>
+
+	protected abstract double speedFactor();
+
+	protected void incrementSpeed(double amount) {
+<span class="nc" id="L77">    double speedBefore = getCurrentSpeed();</span>
+<span class="nc" id="L78">    double speedAfter = getCurrentSpeed() + speedFactor() * amount;</span>
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">    if (speedAfter &lt; speedBefore) {</span>
+<span class="nc" id="L81">      throw new IllegalStateException(</span>
+        &quot;speedAfter: &quot; + speedAfter + &quot;speedBefore: &quot; + speedBefore
+      );
+    }
+
+<span class="nc" id="L86">		setCurrentSpeed(speedAfter);</span>
+<span class="nc" id="L87">	}</span>
+
+	protected void decrementSpeed(double amount) {
+<span class="fc" id="L90">    double speedBefore = getCurrentSpeed();</span>
+<span class="fc" id="L91">    double speedAfter = getCurrentSpeed() - speedFactor() * amount;</span>
+
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">    if (speedAfter &gt; speedBefore) {</span>
+<span class="nc" id="L94">      throw new IllegalStateException(</span>
+        &quot;speedAfter: &quot; + speedAfter + &quot;speedBefore: &quot; + speedBefore
+      );
+    }
+
+<span class="fc" id="L99">    setCurrentSpeed(speedAfter);</span>
+<span class="fc" id="L100">	}</span>
+  /**
+   * Parametervärden håller sig inom intervallet [0, 1]
+   * Farten kan inte sänkas.
+   * Anropande metoder bör fånga upp 'IllegalStateException'
+   */
+	public void gas(double amount) {
+    // intervall [0, 1]
+<span class="nc bnc" id="L108" title="All 4 branches missed.">    if (amount &lt; 0 || amount &gt; 1) {</span>
+<span class="nc" id="L109">      throw new IllegalArgumentException(</span>
+        &quot;Parameter 'amount' är utanför intervallet [0 ... 1]: &quot;
+      );
+    }
+
+<span class="nc" id="L114">    incrementSpeed(amount);</span>
+<span class="nc" id="L115">	}</span>
+
+  /**
+   * Parametervärden håller sig inom intervallet [0, 1]
+   * Farten kan inte sänkas.
+   * Anropande metoder bör fånga upp 'IllegalArgumentExceptions'
+   */
+	public void brake(double amount) {
+    // intervall [0, 1]
+<span class="pc bpc" id="L124" title="2 of 4 branches missed.">    if (amount &lt; 0 || amount &gt; 1) {</span>
+<span class="nc" id="L125">      throw new IllegalArgumentException(</span>
+        &quot;Parameter 'amount' är utanför intervallet [0 ... 1]: &quot;
+      );
+    }
+
+<span class="fc" id="L130">    decrementSpeed(amount);</span>
+<span class="fc" id="L131">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

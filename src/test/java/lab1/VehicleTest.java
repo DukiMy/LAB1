@@ -9,13 +9,16 @@ class VehicleTest {
 
   @Test
   void vehicleMovesForward() {
+    double startX;
+    double startY;
+
     ArrayList<Vehicle> vehicles = new ArrayList<>();
     vehicles.add(new Volvo240());
     vehicles.add(new Saab95());
 
     for (Vehicle v : vehicles) {
-      double startX = v.getX();
-      double startY = v.getY();
+      startX = v.getX();
+      startY = v.getY();
 
       v.startEngine();
       v.move();
@@ -50,7 +53,7 @@ class VehicleTest {
       hasLeftTurn = (direction0 != direction1);
 
       direction1 = v.getDirection();
-      v.turnLeft();
+      v.turnRight();
       direction1 = v.getDirection();
       hasRightTurn = (direction0 != direction1);
 
@@ -71,7 +74,7 @@ class VehicleTest {
     vehicles.add(new Saab95());
 
     for (Vehicle v : vehicles) {
-      
+
       v.startEngine();
       double before = v.getCurrentSpeed();
 
@@ -87,4 +90,3 @@ class VehicleTest {
     }
   }
 }
-

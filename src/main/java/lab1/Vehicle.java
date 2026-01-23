@@ -28,33 +28,33 @@ abstract class Vehicle implements Movable {
 	  stopEngine();
   }
 
-  public double getX() { return pos.getX(); }
+  public double getX()            { return pos.getX(); }
 
-  public double getY() { return pos.getY(); }
+  public double getY()            { return pos.getY(); }
 
-  public double getDirection() { return direction; }
+  public double getDirection()    { return direction; }
 
-	public int getNrDoors() { return nrDoors; }
+	public int    getNrDoors()      { return nrDoors; }
 
-	public double getEnginePower() { return enginePower; }
+	public double getEnginePower()  { return enginePower; }
 
-  /**
-   * currentSpeed ligger alltid mellan [0, enginePower]
-   */
-	public double getCurrentSpeed() {
-    currentSpeed = (currentSpeed < 0) ? 0 : currentSpeed;
-    currentSpeed = (currentSpeed > enginePower) ? enginePower : currentSpeed;
+	public double getCurrentSpeed() { return currentSpeed; }
 
-    return currentSpeed;
-  }
+	public Color  getColor()        { return color; }
 
-	public Color getColor() { return color; }
-
-  public String getModelName() { return modelName; }
+  public String getModelName()    { return modelName; }
 
   protected void setColor(Color c) { color = c; }
 
-  protected void setCurrentSpeed(double s) { currentSpeed = s; }
+  protected void setCurrentSpeed(double s) {
+    if (s == currentSpeed && s != 0.0) {
+      throw new IllegalStateException(
+        "'setCurrentSpeed' ändrade inte farten."
+      );
+    }
+
+    currentSpeed = s;
+  }
 
 	public void startEngine() { setCurrentSpeed(0.1); }
 
@@ -73,38 +73,51 @@ abstract class Vehicle implements Movable {
 
 	protected abstract double speedFactor();
 
-	protected abstract void incrementSpeed(double amount);
+	protected void incrementSpeed(double amount) {
+    double speedBefore = getCurrentSpeed();
+    double speedAfter = getCurrentSpeed() + speedFactor() * amount;
 
-	protected abstract void decrementSpeed(double amount);
+    if (speedAfter < speedBefore) {
+      throw new IllegalStateException(
+        "speedAfter: " + speedAfter + "speedBefore: " + speedBefore
+      );
+    }
 
+		setCurrentSpeed(speedAfter);
+	}
 
+	protected void decrementSpeed(double amount) {
+    double speedBefore = getCurrentSpeed();
+    double speedAfter = getCurrentSpeed() - speedFactor() * amount;
 
+    if (speedAfter > speedBefore) {
+      throw new IllegalStateException(
+        "speedAfter: " + speedAfter + "speedBefore: " + speedBefore
+      );
+    }
+
+    setCurrentSpeed(speedAfter);
+	}
   /**
    * Parametervärden håller sig inom intervallet [0, 1]
-   * Farten kan inte sänkas
+   * Farten kan inte sänkas.
+   * Anropande metoder bör fånga upp 'IllegalStateException'
    */
 	public void gas(double amount) {
     // intervall [0, 1]
-    if (amount < 0 ^ amount > 1) {
+    if (amount < 0 || amount > 1) {
       throw new IllegalArgumentException(
         "Parameter 'amount' är utanför intervallet [0 ... 1]: "
       );
     }
 
-    double speedBefore = currentSpeed;
     incrementSpeed(amount);
-    double speedAfter = currentSpeed;
-
-    if (speedAfter <= speedBefore) {
-      throw new IllegalStateException(
-        "'incrementSpeed' ökade inte farten."
-      );
-    }
 	}
 
   /**
    * Parametervärden håller sig inom intervallet [0, 1]
    * Farten kan inte sänkas.
+   * Anropande metoder bör fånga upp 'IllegalArgumentExceptions'
    */
 	public void brake(double amount) {
     // intervall [0, 1]
@@ -114,14 +127,6 @@ abstract class Vehicle implements Movable {
       );
     }
 
-    double speedBefore = currentSpeed;
     decrementSpeed(amount);
-    double speedAfter = currentSpeed;
-
-    if (speedAfter >= speedBefore) {
-      throw new IllegalStateException(
-        "'decrementSpeed' sänkte inte farten."
-      );
-    }
 	}
 }
