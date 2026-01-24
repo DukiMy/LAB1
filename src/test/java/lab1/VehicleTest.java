@@ -21,6 +21,7 @@ class VehicleTest {
       startY = v.getY();
 
       v.startEngine();
+      v.gas(0.3);
       v.move();
 
       assertTrue(
@@ -52,7 +53,7 @@ class VehicleTest {
       direction1 = v.getDirection();
       hasLeftTurn = (direction0 != direction1);
 
-      direction1 = v.getDirection();
+      direction0 = v.getDirection();
       v.turnRight();
       direction1 = v.getDirection();
       hasRightTurn = (direction0 != direction1);

@@ -74,17 +74,17 @@ abstract class Vehicle implements Movable {
 	protected abstract double speedFactor();
 
 	protected void incrementSpeed(double amount) {
-<span class="nc" id="L77">    double speedBefore = getCurrentSpeed();</span>
-<span class="nc" id="L78">    double speedAfter = getCurrentSpeed() + speedFactor() * amount;</span>
+<span class="fc" id="L77">    double speedBefore = getCurrentSpeed();</span>
+<span class="fc" id="L78">    double speedAfter = getCurrentSpeed() + speedFactor() * amount;</span>
 
-<span class="nc bnc" id="L80" title="All 2 branches missed.">    if (speedAfter &lt; speedBefore) {</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">    if (speedAfter &lt; speedBefore) {</span>
 <span class="nc" id="L81">      throw new IllegalStateException(</span>
         &quot;speedAfter: &quot; + speedAfter + &quot;speedBefore: &quot; + speedBefore
       );
     }
 
-<span class="nc" id="L86">		setCurrentSpeed(speedAfter);</span>
-<span class="nc" id="L87">	}</span>
+<span class="fc" id="L86">		setCurrentSpeed(speedAfter);</span>
+<span class="fc" id="L87">	}</span>
 
 	protected void decrementSpeed(double amount) {
 <span class="fc" id="L90">    double speedBefore = getCurrentSpeed();</span>
@@ -105,14 +105,14 @@ abstract class Vehicle implements Movable {
    */
 	public void gas(double amount) {
     // intervall [0, 1]
-<span class="nc bnc" id="L108" title="All 4 branches missed.">    if (amount &lt; 0 || amount &gt; 1) {</span>
+<span class="pc bpc" id="L108" title="2 of 4 branches missed.">    if (amount &lt; 0 || amount &gt; 1) {</span>
 <span class="nc" id="L109">      throw new IllegalArgumentException(</span>
         &quot;Parameter 'amount' är utanför intervallet [0 ... 1]: &quot;
       );
     }
 
-<span class="nc" id="L114">    incrementSpeed(amount);</span>
-<span class="nc" id="L115">	}</span>
+<span class="fc" id="L114">    incrementSpeed(amount);</span>
+<span class="fc" id="L115">	}</span>
 
   /**
    * Parametervärden håller sig inom intervallet [0, 1]

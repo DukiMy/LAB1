@@ -21,17 +21,17 @@ public final class Volvo240 extends Vehicle {
 
   @Override
 	protected void incrementSpeed(double amount) {
-<span class="nc" id="L24">    double speedBefore = getCurrentSpeed();</span>
-<span class="nc" id="L25">    double speedAfter = Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower());</span>
+<span class="fc" id="L24">    double speedBefore = getCurrentSpeed();</span>
+<span class="fc" id="L25">    double speedAfter = Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower());</span>
 
-<span class="nc bnc" id="L27" title="All 2 branches missed.">    if (speedAfter &lt; speedBefore) {</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">    if (speedAfter &lt; speedBefore) {</span>
 <span class="nc" id="L28">      throw new IllegalStateException(</span>
         &quot;speedAfter: &quot; + speedAfter + &quot;speedBefore: &quot; + speedBefore
       );
     }
 
-<span class="nc" id="L33">    setCurrentSpeed(speedAfter);</span>
-<span class="nc" id="L34">	}</span>
+<span class="fc" id="L33">    setCurrentSpeed(speedAfter);</span>
+<span class="fc" id="L34">	}</span>
 
 	@Override
 	protected void decrementSpeed(double amount) {
