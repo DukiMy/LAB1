@@ -94,4 +94,28 @@ class VehicleTest {
       );
     }
   }
+
+  @Test
+  void gasRejectsOutOfRange() {
+    ArrayList<Vehicle> vehicles = new ArrayList<>();
+    vehicles.add(new Volvo240());
+    vehicles.add(new Saab95());
+
+    for (Vehicle v : vehicles) {
+      assertThrows(IllegalArgumentException.class, () -> v.gas(-0.0001));
+      assertThrows(IllegalArgumentException.class, () -> v.gas( 1.0001));
+    }
+  }
+
+  @Test
+  void brakeRejectsOutOfRange() {
+    ArrayList<Vehicle> vehicles = new ArrayList<>();
+    vehicles.add(new Volvo240());
+    vehicles.add(new Saab95());
+
+    for (Vehicle v : vehicles) {
+      assertThrows(IllegalArgumentException.class, () -> v.brake(-0.0001));
+      assertThrows(IllegalArgumentException.class, () -> v.brake( 1.0001));
+    }
+  }
 }

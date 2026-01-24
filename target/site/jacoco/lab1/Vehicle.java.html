@@ -56,8 +56,8 @@ abstract class Vehicle implements Movable {
 <span class="fc" id="L56">  public void turnRight() { direction -= 0.1d; }</span>
 
   private void validateArgInterval(double arg, double lowBound, double upBound) {
-<span class="pc bpc" id="L59" title="2 of 4 branches missed.">    if (arg &lt; lowBound || arg &gt; upBound) {</span>
-<span class="nc" id="L60">      throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L59" title="All 4 branches covered.">    if (arg &lt; lowBound || arg &gt; upBound) {</span>
+<span class="fc" id="L60">      throw new IllegalArgumentException();</span>
     }
 <span class="fc" id="L62">  }</span>
 

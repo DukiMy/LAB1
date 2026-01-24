@@ -1,3 +1,8 @@
+/**
+ *  Utfärdat av Durim Miziraj
+ *  Kontakt: gusmizdu@student.gu.se
+ */
+
 package lab1;
 import static java.awt.Color.BLACK;
 
