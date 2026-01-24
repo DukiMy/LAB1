@@ -1,18 +1,18 @@
 /**
  *  Utfärdat av Durim Miziraj
  *  Kontakt: gusmizdu@student.gu.se
- * Testing something
  */
 
 package lab1;
+
 import java.awt.Color;
-import static java.lang.Math.sin;
-import static java.lang.Math.cos;
 import java.awt.geom.Point2D;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 abstract class Vehicle implements Movable {
 
-  private final Point2D pos = new Point2D.Double(0.0, 0.0);
+  private final Point2D pos = new Point2D.Double(0.0d, 0.0d);
   private double direction;
 	private int nrDoors;
 	private double enginePower;
@@ -21,7 +21,7 @@ abstract class Vehicle implements Movable {
 	private String modelName;
 
 	protected Vehicle(int nrDoors, double enginePower, Color color, String modelName) {
-    this.direction = 0.0;
+    this.direction = 0.0d;
 		this.nrDoors = nrDoors;
 		this.enginePower = enginePower;
 		this.color = color;
@@ -29,35 +29,47 @@ abstract class Vehicle implements Movable {
 	  stopEngine();
   }
 
-  public double getX()            { return pos.getX(); }
+  public double getX() { return pos.getX(); }
 
-  public double getY()            { return pos.getY(); }
+  public double getY() { return pos.getY(); }
 
-  public double getDirection()    { return direction; }
+  public double getDirection() { return direction; }
 
-	public int    getNrDoors()      { return nrDoors; }
+	public int getNrDoors() { return nrDoors; }
 
-	public double getEnginePower()  { return enginePower; }
+	public double getEnginePower() { return enginePower; }
 
 	public double getCurrentSpeed() { return currentSpeed; }
 
-	public Color  getColor()        { return color; }
+	public int getColor() { return color.getRGB(); }
 
-  public String getModelName()    { return modelName; }
+  public String getModelName() { return modelName; }
 
-  protected void setColor(Color c) { color = c; }
+  public void setColor(int c) { color = new Color(c); }
 
-  protected void setCurrentSpeed(double s) {
-    if (s == currentSpeed && s != 0.0) {
-      throw new IllegalStateException(
-        "'setCurrentSpeed' ändrade inte farten."
-      );
+	public void startEngine() { setCurrentSpeed(0.1d); }
+
+	public void stopEngine() { setCurrentSpeed(0.0d); }
+
+  public void turnLeft() { direction += 0.1d; }
+
+  public void turnRight() { direction -= 0.1d; }
+
+  private void validateArgInterval(double arg, double lowBound, double upBound) {
+    if (arg < lowBound || arg > upBound) {
+      throw new IllegalArgumentException();
     }
-
-    currentSpeed = s;
   }
 
-	public void startEngine() { setCurrentSpeed(0.1); }
+  public void brake(double speedDecrease) {
+    validateArgInterval(speedDecrease, 0.0d, 1.0d);
+    decreaseSpeed(speedDecrease);
+	}
+
+  public void gas(double speedIncrease) {
+    validateArgInterval(speedIncrease, 0.0d, 1.0d);
+    increaseSpeed(speedIncrease);
+	}
 
   public void move() {
     pos.setLocation(
@@ -66,68 +78,56 @@ abstract class Vehicle implements Movable {
     );
   }
 
-  public void turnLeft() { direction += 0.1; }
+  private void setCurrentSpeed(double setSpeed) {
+    if (setSpeed > getEnginePower()) {
+      currentSpeed = getEnginePower();
+      return;
 
-  public void turnRight() { direction -= 0.1; }
+    } else if (setSpeed < 0.0d) {
+      currentSpeed = 0.0d;
 
-	public void stopEngine() { setCurrentSpeed(0.0); }
+    } else {
+      currentSpeed = setSpeed;
+    }
+  }
 
-	protected abstract double speedFactor();
-
-	protected void incrementSpeed(double amount) {
-    double speedBefore = getCurrentSpeed();
-    double speedAfter = getCurrentSpeed() + speedFactor() * amount;
-
-    if (speedAfter < speedBefore) {
+  private void validatedSpeedChange(double speed0, double speed1) {
+    if (speed0 > speed1) {
       throw new IllegalStateException(
-        "speedAfter: " + speedAfter + "speedBefore: " + speedBefore
+        speed0 + " > " + speed1
       );
     }
+  }
 
+	private void increaseSpeed(double speedIncrease) {
+    double speedBefore = getCurrentSpeed();
+    double speedAfter = increaseSpeedFactor(speedIncrease);
+
+    validatedSpeedChange(speedBefore, speedAfter);
 		setCurrentSpeed(speedAfter);
 	}
 
-	protected void decrementSpeed(double amount) {
+	private void decreaseSpeed(double speedDecrease) {
     double speedBefore = getCurrentSpeed();
-    double speedAfter = getCurrentSpeed() - speedFactor() * amount;
+    double speedAfter = decreaseSpeedFactor(speedDecrease);
 
-    if (speedAfter > speedBefore) {
-      throw new IllegalStateException(
-        "speedAfter: " + speedAfter + "speedBefore: " + speedBefore
-      );
-    }
-
-    setCurrentSpeed(speedAfter);
-	}
-  /**
-   * Parametervärden håller sig inom intervallet [0, 1]
-   * Farten kan inte sänkas.
-   * Anropande metoder bör fånga upp 'IllegalStateException'
-   */
-	public void gas(double amount) {
-    // intervall [0, 1]
-    if (amount < 0 || amount > 1) {
-      throw new IllegalArgumentException(
-        "Parameter 'amount' är utanför intervallet [0 ... 1]: "
-      );
-    }
-
-    incrementSpeed(amount);
+    validatedSpeedChange(speedAfter, speedBefore);
+		setCurrentSpeed(speedAfter);
 	}
 
-  /**
-   * Parametervärden håller sig inom intervallet [0, 1]
-   * Farten kan inte sänkas.
-   * Anropande metoder bör fånga upp 'IllegalArgumentExceptions'
-   */
-	public void brake(double amount) {
-    // intervall [0, 1]
-    if (amount < 0 || amount > 1) {
-      throw new IllegalArgumentException(
-        "Parameter 'amount' är utanför intervallet [0 ... 1]: "
-      );
-    }
+  protected abstract double increaseSpeedFactor(double speedIncrease);
+  protected abstract double decreaseSpeedFactor(double speedDecrease);
 
-    decrementSpeed(amount);
-	}
+  @Override
+  public String toString() {
+    return "Vehicle{" +
+          " \n\tmodelName=\"" + modelName + '\"' +
+          ", \n\trDoors=" + nrDoors +
+          ", \n\tenginePower=" + enginePower +
+          ", \n\tcurrentSpeed=" + currentSpeed +
+          ", \n\tdirection=" + direction +
+          ", \n\tpos=(" + pos.getX() + ", " + pos.getY() + ")" +
+          ", \n\tcolor=#" + String.format("%06X", color.getRGB() & 0xFFFFFF) +
+          "\n}";
+  }
 }

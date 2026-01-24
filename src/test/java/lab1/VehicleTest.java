@@ -35,28 +35,28 @@ class VehicleTest {
   }
 
   @Test
-  void turningChangesMovementDirection() {
+  void turningChangesDirection() {
 
     ArrayList<Vehicle> vehicles = new ArrayList<>();
     vehicles.add(new Volvo240());
     vehicles.add(new Saab95());
 
-    double direction0;
-    double direction1;
+    double dirBeforeTurn;
+    double dirAfterTurn;
     boolean hasLeftTurn;
     boolean hasRightTurn;
 
     for (Vehicle v : vehicles) {
 
-      direction0 = v.getDirection();
+      dirBeforeTurn = v.getDirection();
       v.turnLeft();
-      direction1 = v.getDirection();
-      hasLeftTurn = (direction0 != direction1);
+      dirAfterTurn = v.getDirection();
+      hasLeftTurn = (dirBeforeTurn != dirAfterTurn);
 
-      direction0 = v.getDirection();
+      dirBeforeTurn = v.getDirection();
       v.turnRight();
-      direction1 = v.getDirection();
-      hasRightTurn = (direction0 != direction1);
+      dirAfterTurn = v.getDirection();
+      hasRightTurn = (dirBeforeTurn != dirAfterTurn);
 
       assertTrue(
         hasLeftTurn || hasRightTurn,
@@ -70,19 +70,23 @@ class VehicleTest {
 
   @Test
   void brakeReducesSpeed() {
+    double speedBeforeBraking;
+    double speedAfterBreaking;
+
     ArrayList<Vehicle> vehicles = new ArrayList<>();
     vehicles.add(new Volvo240());
     vehicles.add(new Saab95());
 
     for (Vehicle v : vehicles) {
-
       v.startEngine();
-      double before = v.getCurrentSpeed();
+      v.gas(0.5);
+      speedBeforeBraking = v.getCurrentSpeed();
 
       v.brake(0.5);
+      speedAfterBreaking = v.getCurrentSpeed();
 
       assertTrue(
-          v.getCurrentSpeed() < before,
+        speedAfterBreaking < speedBeforeBraking,
         String.format(
           "Farten sänktes inte när %s bromsade in.",
           v.getModelName()

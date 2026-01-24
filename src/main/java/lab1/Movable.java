@@ -1,8 +1,5 @@
 package lab1;
 
-/**
- * Movable
- */
 public interface Movable {
 
   public abstract void move();

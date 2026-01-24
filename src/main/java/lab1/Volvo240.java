@@ -1,49 +1,30 @@
 package lab1;
-import java.awt.Color;
+import static java.awt.Color.BLACK;
 
 public final class Volvo240 extends Vehicle {
 
-	private static final double TRIM_FACTOR = 1.25;
+	private static final double TRIM_FACTOR = 1.25d;
 
 	public Volvo240() {
 		super(
       /* Number of doors */ 4,
-      /* Engine power    */ 100,
-      /* Vehicle color   */ Color.black,
+      /* Engine power    */ 100.0d,
+      /* Vehicle color   */ BLACK,
       /* vehicle model   */ "Volvo240"
     );
 	}
 
-	@Override
-	protected double speedFactor() {
-		return super.getEnginePower() * 0.01 * TRIM_FACTOR;
+	private double speedFactor() {
+		return getEnginePower() * 0.01d * TRIM_FACTOR;
 	}
 
   @Override
-	protected void incrementSpeed(double amount) {
-    double speedBefore = getCurrentSpeed();
-    double speedAfter = Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower());
-
-    if (speedAfter < speedBefore) {
-      throw new IllegalStateException(
-        "speedAfter: " + speedAfter + "speedBefore: " + speedBefore
-      );
-    }
-
-    setCurrentSpeed(speedAfter);
+	protected double increaseSpeedFactor(double speedIncrease) {
+    return Math.min(getCurrentSpeed() + speedFactor() * speedIncrease, getEnginePower());
 	}
 
 	@Override
-	protected void decrementSpeed(double amount) {
-    double speedBefore = getCurrentSpeed();
-    double speedAfter = Math.max( getCurrentSpeed() - speedFactor() * amount, 0);
-
-    if (speedAfter > speedBefore) {
-      throw new IllegalStateException(
-        "speedAfter: " + speedAfter + "speedBefore: " + speedBefore
-      );
-    }
-
-    setCurrentSpeed(speedAfter);
+	protected double decreaseSpeedFactor(double speedDecrease) {
+    return Math.max(getCurrentSpeed() - speedFactor() * speedDecrease, 0.0d);
 	}
 }
