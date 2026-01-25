@@ -35,17 +35,17 @@ abstract class Vehicle implements Movable {
 
 <span class="fc" id="L36">  public double getDirection() { return direction; }</span>
 
-<span class="nc" id="L38">	public int getNrDoors() { return nrDoors; }</span>
+<span class="fc" id="L38">	public int getNrDoors() { return nrDoors; }</span>
 
 <span class="fc" id="L40">	public double getEnginePower() { return enginePower; }</span>
 
 <span class="fc" id="L42">	public double getCurrentSpeed() { return currentSpeed; }</span>
 
-<span class="nc" id="L44">	public int getColor() { return color.getRGB(); }</span>
+<span class="fc" id="L44">	public int getColor() { return color.getRGB(); }</span>
 
 <span class="fc" id="L46">  public String getModelName() { return modelName; }</span>
 
-<span class="nc" id="L48">  public void setColor(int c) { color = new Color(c); }</span>
+<span class="fc" id="L48">  public void setColor(int c) { color = new Color(c); }</span>
 
 <span class="fc" id="L50">	public void startEngine() { setCurrentSpeed(0.1d); }</span>
 
@@ -79,55 +79,39 @@ abstract class Vehicle implements Movable {
 <span class="fc" id="L79">  }</span>
 
   private void setCurrentSpeed(double setSpeed) {
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">    if (setSpeed &gt; getEnginePower()) {</span>
-<span class="nc" id="L83">      currentSpeed = getEnginePower();</span>
-<span class="nc" id="L84">      return;</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">    if (setSpeed &gt; getEnginePower()) {</span>
+<span class="fc" id="L83">      currentSpeed = getEnginePower();</span>
+<span class="fc" id="L84">      return;</span>
 
-<span class="pc bpc" id="L86" title="1 of 2 branches missed.">    } else if (setSpeed &lt; 0.0d) {</span>
-<span class="nc" id="L87">      currentSpeed = 0.0d;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">    } else if (setSpeed &lt; 0.0d) {</span>
+<span class="fc" id="L87">      currentSpeed = 0.0d;</span>
 
     } else {
 <span class="fc" id="L90">      currentSpeed = setSpeed;</span>
     }
 <span class="fc" id="L92">  }</span>
 
-  private void validatedSpeedChange(double speed0, double speed1) {
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">    if (speed0 &gt; speed1) {</span>
-<span class="nc" id="L96">      throw new IllegalStateException(</span>
-        speed0 + &quot; &gt; &quot; + speed1
-      );
-    }
-<span class="fc" id="L100">  }</span>
-
 	private void increaseSpeed(double speedIncrease) {
-<span class="fc" id="L103">    double speedBefore = getCurrentSpeed();</span>
-<span class="fc" id="L104">    double speedAfter = increaseSpeedFactor(speedIncrease);</span>
-
-<span class="fc" id="L106">    validatedSpeedChange(speedBefore, speedAfter);</span>
-<span class="fc" id="L107">		setCurrentSpeed(speedAfter);</span>
-<span class="fc" id="L108">	}</span>
+<span class="fc" id="L95">		setCurrentSpeed(increaseSpeedFactor(speedIncrease));</span>
+<span class="fc" id="L96">	}</span>
 
 	private void decreaseSpeed(double speedDecrease) {
-<span class="fc" id="L111">    double speedBefore = getCurrentSpeed();</span>
-<span class="fc" id="L112">    double speedAfter = decreaseSpeedFactor(speedDecrease);</span>
-
-<span class="fc" id="L114">    validatedSpeedChange(speedAfter, speedBefore);</span>
-<span class="fc" id="L115">		setCurrentSpeed(speedAfter);</span>
-<span class="fc" id="L116">	}</span>
+<span class="fc" id="L99">		setCurrentSpeed(decreaseSpeedFactor(speedDecrease));</span>
+<span class="fc" id="L100">	}</span>
 
   protected abstract double increaseSpeedFactor(double speedIncrease);
   protected abstract double decreaseSpeedFactor(double speedDecrease);
 
   @Override
   public String toString() {
-<span class="nc" id="L123">    return &quot;Vehicle{&quot; +</span>
+<span class="fc" id="L107">    return &quot;Vehicle{&quot; +</span>
           &quot; \n\tmodelName=\&quot;&quot; + modelName + '\&quot;' +
           &quot;, \n\trDoors=&quot; + nrDoors +
           &quot;, \n\tenginePower=&quot; + enginePower +
           &quot;, \n\tcurrentSpeed=&quot; + currentSpeed +
           &quot;, \n\tdirection=&quot; + direction +
-<span class="nc" id="L129">          &quot;, \n\tpos=(&quot; + pos.getX() + &quot;, &quot; + pos.getY() + &quot;)&quot; +</span>
-<span class="nc" id="L130">          &quot;, \n\tcolor=#&quot; + String.format(&quot;%06X&quot;, color.getRGB() &amp; 0xFFFFFF) +</span>
+<span class="fc" id="L113">          &quot;, \n\tpos=(&quot; + pos.getX() + &quot;, &quot; + pos.getY() + &quot;)&quot; +</span>
+<span class="fc" id="L114">          &quot;, \n\tcolor=#&quot; + String.format(&quot;%06X&quot;, color.getRGB() &amp; 0xFFFFFF) +</span>
           &quot;\n}&quot;;
   }
 }

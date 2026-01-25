@@ -6,7 +6,7 @@
 package lab1;
 import static java.awt.Color.RED;
 
-public final class Saab95 extends Vehicle {
+public final class Saab95 extends Vehicle implements TurboChargable{
 
 	private boolean turboOn;
 
@@ -21,10 +21,10 @@ public final class Saab95 extends Vehicle {
 <span class="fc" id="L21">    turboOn = false;</span>
 <span class="fc" id="L22">	}</span>
 
-<span class="nc" id="L24">	public void setTurbo(boolean state) { turboOn = state; }</span>
+<span class="fc" id="L24">	public void setTurbo(boolean state) { turboOn = state; }</span>
 
 	private double speedFactor() {
-<span class="pc bpc" id="L27" title="1 of 2 branches missed.">		return getEnginePower() * 0.01d * (turboOn ? 1.3d : 1.0d);</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">		return getEnginePower() * 0.01d * (turboOn ? 1.3d : 1.0d);</span>
 	}
 
   @Override
