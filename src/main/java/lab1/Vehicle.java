@@ -91,28 +91,12 @@ abstract class Vehicle implements Movable {
     }
   }
 
-  private void validatedSpeedChange(double speed0, double speed1) {
-    if (speed0 > speed1) {
-      throw new IllegalStateException(
-        speed0 + " > " + speed1
-      );
-    }
-  }
-
 	private void increaseSpeed(double speedIncrease) {
-    double speedBefore = getCurrentSpeed();
-    double speedAfter = increaseSpeedFactor(speedIncrease);
-
-    validatedSpeedChange(speedBefore, speedAfter);
-		setCurrentSpeed(speedAfter);
+		setCurrentSpeed(increaseSpeedFactor(speedIncrease));
 	}
 
 	private void decreaseSpeed(double speedDecrease) {
-    double speedBefore = getCurrentSpeed();
-    double speedAfter = decreaseSpeedFactor(speedDecrease);
-
-    validatedSpeedChange(speedAfter, speedBefore);
-		setCurrentSpeed(speedAfter);
+		setCurrentSpeed(decreaseSpeedFactor(speedDecrease));
 	}
 
   protected abstract double increaseSpeedFactor(double speedIncrease);

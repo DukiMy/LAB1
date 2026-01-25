@@ -6,7 +6,7 @@
 package lab1;
 import static java.awt.Color.RED;
 
-public final class Saab95 extends Vehicle {
+public final class Saab95 extends Vehicle implements TurboChargable{
 
 	private boolean turboOn;
 
